@@ -1,5 +1,7 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
+import 'package:get/get.dart';
 import 'package:graduation_swiftchat/widgets/PrimaryButton.dart';
 
 class LoginForm extends StatefulWidget {
@@ -34,7 +36,13 @@ class _LoginFormState extends State<LoginForm> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              PrimaryButton(butName: "LOGIN", butIcon: Icons.lock_open_sharp),
+              PrimaryButton(
+                onTap: () {
+                  Get.offAllNamed('/homePage');
+                },
+                butName: "LOGIN",
+                butIcon: Icons.lock_open_sharp,
+              ),
             ],
           ),
         ],

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
+import 'package:get/get.dart';
 import 'package:graduation_swiftchat/widgets/PrimaryButton.dart';
 
 class SignUpForm extends StatefulWidget {
@@ -41,7 +41,13 @@ class _SignUpFormState extends State<SignUpForm> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              PrimaryButton(butName: "SIGN UP", butIcon: Icons.lock_open_sharp),
+              PrimaryButton(
+                onTap: () {
+                  Get.offAllNamed('/homePage');
+                },
+                butName: "SIGN UP",
+                butIcon: Icons.lock_open_sharp,
+              ),
             ],
           ),
         ],
