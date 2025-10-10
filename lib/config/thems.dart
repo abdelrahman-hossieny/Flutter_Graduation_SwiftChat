@@ -6,6 +6,10 @@ var lightTheme = ThemeData();
 var darkTheme = ThemeData(
   brightness: Brightness.dark,
   useMaterial3: true,
+  // Abdoh :: to make appBar color in all app the same
+  appBarTheme: AppBarTheme(
+    backgroundColor: dContainerColor
+  ) ,
   colorScheme: const ColorScheme.dark(
     primary: dPrimaryColor,
     onPrimary: dOnBackgroundColor,

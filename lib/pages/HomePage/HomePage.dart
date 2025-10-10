@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:graduation_swiftchat/config/images.dart';
 import 'package:graduation_swiftchat/config/srtings.dart';
 import 'package:graduation_swiftchat/pages/HomePage/Widgets/ChatsList.dart';
@@ -52,6 +53,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             icon: Icon(Icons.more_vert),
             onPressed: () {
               // Handle more options action
+              Get.toNamed('/Profilepage');
             },
           ),
         ],

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "137716390797",
+    "project_id": "graduation-swift-chat",
+    "storage_bucket": "graduation-swift-chat.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:137716390797:android:92c7084b6009416e04fbc4",
+        "android_client_info": {
+          "package_name": "com.example.graduation_swiftchat"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA0a8wnD44aJJkX8_xEM1JxveVmKj5gFDU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
