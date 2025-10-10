@@ -1,11 +1,17 @@
+// ignore_for_file: unnecessary_import, deprecated_member_use
+
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:graduation_swiftchat/controllers/ProfileController.dart';
 import 'package:graduation_swiftchat/widgets/PrimaryButton.dart';
 
-class UpdateProfile extends StatelessWidget {
-  const UpdateProfile({super.key});
+class UpdateUserProfile extends StatelessWidget {
+  const UpdateUserProfile({super.key});
 
   @override
   Widget build(BuildContext context) {
+    //ProfileController profileController = Get.put(ProfileController());
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final textTheme = theme.textTheme;

@@ -1,10 +1,13 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:graduation_swiftchat/controllers/AuthController.dart';
-import 'package:graduation_swiftchat/pages/profile/widgets/UserInfo.dart';
+import 'package:graduation_swiftchat/controllers/ProfileController.dart';
+import 'package:graduation_swiftchat/pages/UserProfile/widgets/UserInfo.dart';
 
-class ProfilePage extends StatelessWidget {
-  const ProfilePage({super.key});
+class UserProfilePage extends StatelessWidget {
+  const UserProfilePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -12,6 +15,7 @@ class ProfilePage extends StatelessWidget {
     final colorScheme = theme.colorScheme;
     final textTheme = theme.textTheme;
     AuthController authController = Get.put(AuthController());
+    ProfileController profileController = Get.put(ProfileController());
     return Scaffold(
       backgroundColor: colorScheme.background,
       appBar: AppBar(
@@ -34,6 +38,7 @@ class ProfilePage extends StatelessWidget {
             icon: Icon(Icons.edit, color: colorScheme.onBackground),
             onPressed: () {
               Get.toNamed("/updateProfilePage");
+              
             },
           ),
         ],

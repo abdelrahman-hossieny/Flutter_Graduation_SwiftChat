@@ -44,11 +44,29 @@ class AuthController extends GetxController {
           snackPosition: SnackPosition.BOTTOM,
           duration: Duration(seconds: 3),
         );
+      } else if (e.code == 'invalid-email') {
+        Get.snackbar(
+          'Error',
+          'The email address is badly formatted',
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+          snackPosition: SnackPosition.BOTTOM,
+          duration: Duration(seconds: 3),
+        );
+      } else {
+        Get.snackbar(
+          'Error',
+          'Firebase Auth Error: ${e.message}',
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+          snackPosition: SnackPosition.BOTTOM,
+          duration: Duration(seconds: 3),
+        );
       }
     } catch (e) {
       Get.snackbar(
         'Error',
-        'Something went wrong, please try again',
+        'Something went wrong, please try again: ${e.toString()}',
         backgroundColor: Colors.red,
         colorText: Colors.white,
         snackPosition: SnackPosition.BOTTOM,
@@ -94,11 +112,29 @@ class AuthController extends GetxController {
           snackPosition: SnackPosition.BOTTOM,
           duration: Duration(seconds: 3),
         );
+      } else if (e.code == 'invalid-email') {
+        Get.snackbar(
+          'Error',
+          'The email address is badly formatted',
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+          snackPosition: SnackPosition.BOTTOM,
+          duration: Duration(seconds: 3),
+        );
+      } else {
+        Get.snackbar(
+          'Error',
+          'Firebase Auth Error: ${e.message}',
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+          snackPosition: SnackPosition.BOTTOM,
+          duration: Duration(seconds: 3),
+        );
       }
     } catch (e) {
       Get.snackbar(
         'Error',
-        'Something went wrong, please try again',
+        'Something went wrong, please try again: ${e.toString()}',
         backgroundColor: Colors.red,
         colorText: Colors.white,
         snackPosition: SnackPosition.BOTTOM,
@@ -136,6 +172,7 @@ class AuthController extends GetxController {
     var newUser = UserModel(
         email: email,
         name: name,
+        id: auth.currentUser!.uid,
     );
 
     try {

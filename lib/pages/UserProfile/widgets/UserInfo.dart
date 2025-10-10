@@ -1,10 +1,16 @@
+// ignore_for_file: unnecessary_import, deprecated_member_use
+
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:graduation_swiftchat/controllers/ProfileController.dart';
 
 class UserInfo extends StatelessWidget {
   const UserInfo({super.key});
 
   @override
   Widget build(BuildContext context) {
+    ProfileController profileController = Get.put(ProfileController());
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final textTheme = theme.textTheme;
@@ -23,10 +29,7 @@ class UserInfo extends StatelessWidget {
             padding: const EdgeInsets.all(4),
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              border: Border.all(
-                color: colorScheme.primary,
-                width: 3,
-              ),
+              border: Border.all(color: colorScheme.primary, width: 3),
             ),
             child: Container(
               width: 100,
@@ -64,19 +67,21 @@ class UserInfo extends StatelessWidget {
           const SizedBox(height: 20),
 
           // Name
-          Text(
-            'Nitish Kumar',
-            style: textTheme.bodyLarge?.copyWith(
-              fontWeight: FontWeight.w600,
+          Obx(
+            () => Text(
+              profileController.currentUser.value?.name ?? 'User',
+              style: textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w600),
             ),
           ),
           const SizedBox(height: 8),
 
           // Email
-          Text(
-            'nitishr@gmail.com',
-            style: textTheme.labelLarge?.copyWith(
-              color: colorScheme.onPrimaryContainer.withOpacity(0.7),
+          Obx(
+            () => Text(
+              profileController.currentUser.value?.email ?? 'Email',
+              style: textTheme.labelLarge?.copyWith(
+                color: colorScheme.onPrimaryContainer.withOpacity(0.7),
+              ),
             ),
           ),
           const SizedBox(height: 30),
@@ -85,26 +90,41 @@ class UserInfo extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              _buildActionButton(
-                context,
-                icon: Icons.call,
-                label: 'Call',
-                color: Colors.green,
-                onTap: () {},
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                  child: _buildActionButton(
+                    context,
+                    icon: Icons.call,
+                    label: 'Call',
+                    color: Colors.green,
+                    onTap: () {},
+                  ),
+                ),
               ),
-              _buildActionButton(
-                context,
-                icon: Icons.videocam,
-                label: 'Video',
-                color: Colors.orange,
-                onTap: () {},
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                  child: _buildActionButton(
+                    context,
+                    icon: Icons.videocam,
+                    label: 'Video',
+                    color: Colors.orange,
+                    onTap: () {},
+                  ),
+                ),
               ),
-              _buildActionButton(
-                context,
-                icon: Icons.chat,
-                label: 'Chat',
-                color: Colors.blue,
-                onTap: () {},
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                  child: _buildActionButton(
+                    context,
+                    icon: Icons.chat,
+                    label: 'Chat',
+                    color: Colors.blue,
+                    onTap: () {},
+                  ),
+                ),
               ),
             ],
           ),
@@ -113,7 +133,13 @@ class UserInfo extends StatelessWidget {
     );
   }
 
-  Widget _buildActionButton(BuildContext context, {required IconData icon, required String label, required Color color, required VoidCallback onTap,}) {
+  Widget _buildActionButton(
+    BuildContext context, {
+    required IconData icon,
+    required String label,
+    required Color color,
+    required VoidCallback onTap,
+  }) {
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
 
@@ -121,21 +147,27 @@ class UserInfo extends StatelessWidget {
       onTap: onTap,
       borderRadius: BorderRadius.circular(10),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
         decoration: BoxDecoration(
           color: colorScheme.surface,
           borderRadius: BorderRadius.circular(10),
         ),
-        child: Row(
+        child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(icon, color: color, size: 18),
-            const SizedBox(width: 8),
-            Text(
-              label,
-              style: textTheme.labelLarge?.copyWith(
-                color: color,
-                fontWeight: FontWeight.w500,
+            const SizedBox(height: 4),
+            Flexible(
+              child: Text(
+                label,
+                style: textTheme.labelSmall?.copyWith(
+                  color: color,
+                  fontWeight: FontWeight.w500,
+                ),
+                textAlign: TextAlign.center,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
               ),
             ),
           ],

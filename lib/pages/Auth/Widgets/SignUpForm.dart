@@ -125,11 +125,17 @@ class _SignUpFormState extends State<SignUpForm> {
                     children: [
                       PrimaryButton(
                         onTap: () {
-                          authController.createUser(
-                            nameController.text.trim(),
-                            emailController.text.trim(),
-                            passwordController.text,
-                          );
+                          if (_formKey.currentState!.validate()) {
+                            authController.createUser(
+                              emailController.text.trim(),
+                              passwordController.text,
+                              nameController.text.trim(),
+                            );
+                          } else {
+                            setState(() {
+                              _autoValidate = true;
+                            });
+                          }
                         },
 
                         butName: "SIGN UP",
