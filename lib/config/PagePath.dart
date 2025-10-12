@@ -3,9 +3,9 @@
 import 'package:get/get.dart';
 import 'package:graduation_swiftchat/pages/Auth/AuthPage.dart';
 import 'package:graduation_swiftchat/pages/HomePage/HomePage.dart';
+import 'package:graduation_swiftchat/pages/ProfilePage/ProfilePage.dart';
 import 'package:graduation_swiftchat/pages/chat/chatPage.dart';
-import 'package:graduation_swiftchat/pages/UserProfile/profilepage.dart';
-import 'package:graduation_swiftchat/pages/UserProfile/update_profile.dart';
+import 'package:graduation_swiftchat/pages/contact_page/contact_page.dart';
 var pagePath=[
   GetPage(
     name: "/authPage",
@@ -24,12 +24,12 @@ var pagePath=[
   ),
   GetPage(
     name: "/Profilepage",
-    page: () => UserProfilePage(),
+    page: () => ProfilePage(),
     transition: Transition.rightToLeft,
   ),
   GetPage(
-    name: "/updateProfilePage",
-    page: () => UpdateUserProfile(),
+    name: "/contactPage",
+    page: () => ContactPage(),
     transition: Transition.rightToLeft,
   ),
 ];

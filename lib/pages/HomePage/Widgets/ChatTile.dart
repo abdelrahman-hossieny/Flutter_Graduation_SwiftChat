@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:graduation_swiftchat/config/images.dart';
 
 class ChatTile extends StatefulWidget {
-  final String imageURL;
+  final String imageUrl;
   final String name;
   final String lastChat;
   final String lastTime;
   const ChatTile({
     super.key,
-    required this.imageURL,
+    required this.imageUrl,
     required this.name,
     required this.lastChat,
     required this.lastTime,
@@ -33,7 +33,7 @@ class _ChatTileState extends State<ChatTile> {
         children: [
           Row(
             children: [
-              Image.asset(widget.imageURL, width: 70),
+              Image.asset(widget.imageUrl, width: 70),
               SizedBox(width: 15),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

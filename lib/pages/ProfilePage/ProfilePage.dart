@@ -1,11 +1,15 @@
 // ignore_for_file: deprecated_member_use
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_rx/get_rx.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:graduation_swiftchat/controllers/AuthController.dart';
 import 'package:graduation_swiftchat/controllers/ProfileController.dart';
+import 'package:graduation_swiftchat/controllers/image_picker_controller.dart';
 import 'package:graduation_swiftchat/widgets/PrimaryButton.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -13,7 +17,7 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    RxBool isEditing = false.obs;
+    RxBool isEdit = false.obs;
     ProfileController profileController = Get.put(ProfileController());
     TextEditingController nameController = TextEditingController(
       text: profileController.currentUser.value!.name,
@@ -27,8 +31,23 @@ class ProfilePage extends StatelessWidget {
     TextEditingController aboutController = TextEditingController(
       text: profileController.currentUser.value!.about,
     );
+    ImagePickerController imagePickerController = Get.put(
+      ImagePickerController(),
+    );
+    RxString imagePath = ''.obs;
+
+    AuthController authController = Get.put(AuthController());
     return Scaffold(
-      appBar: AppBar(title: Text('Profile Page')),
+      appBar: AppBar(title: Text('Profile Page'),
+        actions: [
+          IconButton(
+            onPressed: () {
+              authController.logOut();
+            },
+            icon: Icon(Icons.logout),
+          ),
+        ],
+      ),
       body: Padding(
         padding: const EdgeInsets.all(10),
         child: ListView(
@@ -51,18 +70,64 @@ class ProfilePage extends StatelessWidget {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            CircleAvatar(
-                              backgroundColor: Theme.of(
-                                context,
-                              ).colorScheme.background,
-                              radius: 80,
-                              child: Icon(
-                                Icons.image,
-                                size: 80,
-                                color: Theme.of(
-                                  context,
-                                ).colorScheme.onBackground,
-                              ),
+                            Obx(
+                              () => isEdit.value
+                                  ? InkWell(
+                                      splashColor: Colors.transparent,
+                                      highlightColor: Colors.transparent,
+                                      onTap: () async {
+                                        imagePath.value =
+                                            await imagePickerController
+                                                .pickImage();
+                                        print("Image Picked" + imagePath.value);
+                                      },
+                                      child: Container(
+                                        height: 200,
+                                        width: 200,
+                                        decoration: BoxDecoration(
+                                          color: Theme.of(
+                                            context,
+                                          ).colorScheme.background,
+                                          borderRadius: BorderRadius.circular(
+                                            100,
+                                          ),
+                                        ),
+                                        child: imagePath.value == ""
+                                            ? Icon(Icons.add)
+                                            : ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(100),
+                                                child: Image.file(
+                                                  File(imagePath.value),
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              ),
+                                      ),
+                                    )
+                                  : Container(
+                                      height: 200,
+                                      width: 200,
+                                      decoration: BoxDecoration(
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.background,
+                                        borderRadius: BorderRadius.circular(
+                                          100,
+                                        ),
+                                      ),
+                                      child:
+                                          profileController.currentUser.value!.profileImage == null || profileController.currentUser.value!.profileImage == ""
+                                          ? Icon(Icons.image)
+                                          : ClipRRect(
+                                            borderRadius:
+                                            BorderRadius.circular(100),
+                                            child: Image.file(
+                                              File(profileController.currentUser.value!.profileImage!),
+                                              fit: BoxFit.cover,
+                                              errorBuilder: (context, error, stackTrace) => Icon(Icons.error),
+                                            ),
+                                          ),
+                                    ),
                             ),
                           ],
                         ),
@@ -70,9 +135,9 @@ class ProfilePage extends StatelessWidget {
                         Obx(
                           () => TextField(
                             controller: nameController,
-                            enabled: isEditing.value,
+                            enabled: isEdit.value,
                             decoration: InputDecoration(
-                              filled: isEditing.value,
+                              filled: isEdit.value,
                               border: OutlineInputBorder(),
                               labelText: 'Name',
                               prefixIcon: Icon(Icons.person),
@@ -82,9 +147,9 @@ class ProfilePage extends StatelessWidget {
                         Obx(
                           () => TextField(
                             controller: aboutController,
-                            enabled: isEditing.value,
+                            enabled: isEdit.value,
                             decoration: InputDecoration(
-                              filled: isEditing.value,
+                              filled: isEdit.value,
                               border: OutlineInputBorder(),
                               labelText: 'About',
                               prefixIcon: Icon(Icons.info),
@@ -96,7 +161,7 @@ class ProfilePage extends StatelessWidget {
                             controller: emailController,
                             enabled: false,
                             decoration: InputDecoration(
-                              filled: isEditing.value,
+                              filled: isEdit.value,
                               border: OutlineInputBorder(),
                               labelText: 'Email',
                               prefixIcon: Icon(Icons.alternate_email_rounded),
@@ -106,9 +171,9 @@ class ProfilePage extends StatelessWidget {
                         Obx(
                           () => TextField(
                             controller: phoneController,
-                            enabled: isEditing.value,
+                            enabled: isEdit.value,
                             decoration: InputDecoration(
-                              filled: isEditing.value,
+                              filled: isEdit.value,
                               border: OutlineInputBorder(),
                               labelText: 'Phone',
                               prefixIcon: Icon(Icons.phone),
@@ -121,19 +186,26 @@ class ProfilePage extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Obx(
-                              () => isEditing.value
+                              () => isEdit.value
                                   ? PrimaryButton(
                                       butName: 'Save',
                                       butIcon: Icons.save,
-                                      onTap: () {
-                                        isEditing.value = false;
+                                      onTap: () async {
+                                        await profileController.updateProfile(
+                                          imagePath.value,
+                                          nameController.text,
+                                          aboutController.text,
+                                          phoneController.text,
+                                        );
+
+                                        isEdit.value = false;
                                       },
                                     )
                                   : PrimaryButton(
                                       butName: 'Edit',
                                       butIcon: Icons.edit,
                                       onTap: () {
-                                        isEditing.value = true;
+                                        isEdit.value = true;
                                       },
                                     ),
                             ),

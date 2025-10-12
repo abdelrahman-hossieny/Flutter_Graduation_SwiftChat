@@ -5,6 +5,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:graduation_swiftchat/config/images.dart';
 import 'package:graduation_swiftchat/config/srtings.dart';
+import 'package:graduation_swiftchat/controllers/ProfileController.dart';
+import 'package:graduation_swiftchat/controllers/image_picker_controller.dart';
 import 'package:graduation_swiftchat/pages/HomePage/Widgets/ChatsList.dart';
 import 'package:graduation_swiftchat/pages/HomePage/Widgets/TabPar.dart';
 
@@ -26,6 +28,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    ProfileController profileController = Get.put(ProfileController());
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.primaryContainer,
@@ -51,7 +54,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           ),
           IconButton(
             icon: Icon(Icons.more_vert),
-            onPressed: () {
+            onPressed: () async {
+              await profileController.getUserDetails();
               // Handle more options action
               Get.toNamed('/Profilepage');
             },
@@ -62,7 +66,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Theme.of(context).colorScheme.primary,
         onPressed: () {
-          // Handle FAB action
+          Get.toNamed('/contactPage');
         },
         child: Icon(
           Icons.add,
