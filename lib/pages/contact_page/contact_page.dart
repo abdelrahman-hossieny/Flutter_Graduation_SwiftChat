@@ -9,6 +9,7 @@ import '../../Config/Images.dart';
 import '../../controllers/ProfileController.dart';
 import '../../controllers/contact_controller.dart';
 import '../HomePage/Widgets/ChatTile.dart';
+import '../chat/chatPage.dart';
 
 class ContactPage extends StatelessWidget {
   const ContactPage({super.key});
@@ -70,7 +71,7 @@ class ContactPage extends StatelessWidget {
                     splashColor: Colors.transparent,
                     highlightColor: Colors.transparent,
                     onTap: () {
-                      // Get.to(ChatPage(userModel: e));
+                      Get.to(ChatPage(userModel: e));
                     },
                     child: ChatTile(
                       // imageUrl:
