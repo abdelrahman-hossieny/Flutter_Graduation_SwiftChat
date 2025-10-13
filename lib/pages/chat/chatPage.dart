@@ -1,136 +1,217 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:graduation_swiftchat/pages/chat/widgets/chatbubble.dart';
+import 'dart:io';
 
-class chatpage extends StatelessWidget {
-  const chatpage({super.key});
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/get_navigation.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
+import 'package:graduation_swiftchat/pages/chat/widgets/chatbubble.dart';
+import 'package:graduation_swiftchat/pages/chat/widgets/type_message.dart';
+import 'package:intl/intl.dart';
+
+import '../../Config/Images.dart';
+import '../../controllers/ProfileController.dart';
+import '../../controllers/chat_controller.dart';
+import '../../models/user_model.dart';
+
+class ChatPage extends StatelessWidget {
+  final UserModel userModel;
+
+  const ChatPage({super.key, required this.userModel});
 
   @override
   Widget build(BuildContext context) {
+    ChatController chatController = Get.put(ChatController());
+    TextEditingController messageController = TextEditingController();
+    ProfileController profileController = Get.put(ProfileController());
+    // CallController callController = Get.put(CallController());
     return Scaffold(
-      resizeToAvoidBottomInset: true,
       appBar: AppBar(
-        leadingWidth: 30,
-        title: Row(
-          children: [
-            CircleAvatar(
-              radius: 20,
-              backgroundImage: AssetImage("assets/Images/boy_pic.png"),
-            ),
-            SizedBox(width: 10),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text("FavAbdoh", style: TextStyle(fontSize: 16)),
-                Text("Online", style: Theme.of(context).textTheme.labelMedium),
-              ],
-            ),
-          ],
-        ),
-        actions: [
-          IconButton(onPressed: () {}, icon: Icon(Icons.phone)),
-          IconButton(onPressed: () {}, icon: Icon(Icons.video_call)),
-        ],
-      ),
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView(
-              padding: const EdgeInsets.all(12.0),
-              children: [
-                ChatBubble(
-                  message: "message message message vv message",
-                  time: "10:10 AM",
-                  status: "reed",
-                  isComming: true,
-                  imageURL: "assets/Images/chatStatus.png",
-                ),
-                ChatBubble(
-                  message: "message message message vv message",
-                  time: "10:10 AM",
-                  status: "reed",
-                  isComming: false,
-                  imageURL: "",
-                ),
-                ChatBubble(
-                  message: "this omy massage and attached image",
-                  time: "10:10 AM",
-                  status: "reed",
-                  isComming: false,
-                  imageURL: "assets/Images/girl_pic.png",
-                ),
-                ChatBubble(
-                  message: "message message message vv message",
-                  time: "10:10 AM",
-                  status: "reed",
-                  isComming: true,
-                  imageURL: "assets/Images/download.jpeg",
-                ),
-              ],
+        leading: InkWell(
+          splashColor: Colors.transparent,
+          highlightColor: Colors.transparent,
+          onTap: () {
+            // Get.to(UserProfilePage(
+            //   userModel: userModel,
+            // ));
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(5),
+            child: CircleAvatar(
+              radius: 25,
+              backgroundColor: Colors.grey[300],
+              child:
+                  (userModel.profileImage != null &&
+                      userModel.profileImage!.isNotEmpty)
+                  ? ClipOval(
+                      child: Image.file(
+                        File(userModel.profileImage!),
+                        fit: BoxFit.cover,
+                        width: 50,
+                        height: 50,
+                      ),
+                    )
+                  : Center(
+                      child: Icon(Icons.add, size: 30, color: Colors.grey[700]),
+                    ),
             ),
           ),
-          Container(
-            padding: const EdgeInsets.only(
-              left: 12,
-              right: 12,
-              top: 8,
-              bottom: 30,
-            ),
-            color: Theme.of(context).scaffoldBackgroundColor,
-            child: Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 14,
-                vertical: 3,
-              ),
-              decoration: BoxDecoration(
-                color: const Color(0xFF2D3440),
-                borderRadius: BorderRadius.circular(30),
-                border: Border.all(
-                  color: Colors.blue,
-                  width: 2,
-                ),
-              ),
-              child: Row(
+        ),
+        title: InkWell(
+          splashColor: Colors.transparent,
+          highlightColor: Colors.transparent,
+          onTap: () {
+            // Get.to(UserProfilePage(
+            //   userModel: userModel,
+            // ));
+          },
+          child: Row(
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Icon(Icons.mic, color: Colors.grey[400], size: 26),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: TextField(
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 15,
-                      ),
-                      decoration: InputDecoration(
-                        hintText: "Type here...",
-                        hintStyle: TextStyle(
-                          color: Colors.grey[600],
-                          fontSize: 15,
-                        ),
-                        border: InputBorder.none,
-                        filled: true,
-                        fillColor: Colors.transparent,
-                        contentPadding: const EdgeInsets.symmetric(
-                          vertical: 10,
-                        ),
-                      ),
-                    ),
+                  Text(
+                    userModel.name ?? "User",
+                    style: Theme.of(context).textTheme.bodyLarge,
                   ),
-                  Icon(
-                    Icons.image_outlined,
-                    color: Colors.grey[400],
-                    size: 26,
+                  StreamBuilder(
+                    stream: chatController.getStatus(userModel.id!),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Text("........");
+                      } else {
+                        return Text(
+                          snapshot.data!.status ?? "",
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: snapshot.data!.status == "Online"
+                                ? Colors.green
+                                : Colors.grey,
+                          ),
+                        );
+                      }
+                    },
                   ),
-                  const SizedBox(width: 12),
-                  Icon(
-                    Icons.send_rounded,
-                    color: Colors.grey[400],
-                    size: 28,
+                ],
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              // Get.to(AudioCallPage(target: userModel));
+              // callController.callAction(
+              //     userModel, profileController.currentUser.value, "audio");
+            },
+            icon: Icon(Icons.phone),
+          ),
+          IconButton(
+            onPressed: () {
+              // Get.to(VideoCallPage(target: userModel));
+              // callController.callAction(
+              //     userModel, profileController.currentUser.value, "video");
+            },
+            icon: Icon(Icons.video_call),
+          ),
+        ],
+      ),
+      body: Padding(
+        padding: EdgeInsets.only(bottom: 10, top: 10, left: 10, right: 10),
+        child: Column(
+          children: [
+            Expanded(
+              child: Stack(
+                children: [
+                  StreamBuilder(
+                    stream: chatController.getMessages(userModel.id!),
+                    builder: (context, snapshot) {
+                      var roomid = chatController.getRoomId(userModel.id!);
+                      // chatController.markMessagesAsRead(roomid!);
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+                      if (snapshot.hasError) {
+                        return Center(child: Text("Error: ${snapshot.error}"));
+                      }
+                      if (snapshot.data == null) {
+                        return const Center(child: Text("No Messages"));
+                      } else {
+                        return ListView.builder(
+                          reverse: true,
+                          itemCount: snapshot.data!.length,
+                          itemBuilder: (context, index) {
+                            DateTime timestamp = DateTime.parse(
+                              snapshot.data![index].timestamp!,
+                            );
+                            String formattedTime =
+                            DateFormat('hh:mm a').format(timestamp);
+                            return ChatBubble(
+                              message: snapshot.data![index].message!,
+                              imageURL: snapshot.data![index].imageUrl ?? "",
+                              isComming:
+                                  snapshot.data![index].receiverId ==
+                                  profileController.currentUser.value!.id,
+                              // status: snapshot.data![index].readStatus!,
+                              status: 'read',
+                              time: formattedTime,
+                            );
+                          },
+                        );
+                      }
+                    },
+                  ),
+                  Obx(
+                    () => (chatController.selectedImagePath.value != "")
+                        ? Positioned(
+                            bottom: 0,
+                            left: 0,
+                            right: 0,
+                            child: Stack(
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.only(bottom: 10),
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                      image: FileImage(
+                                        File(
+                                          chatController
+                                              .selectedImagePath
+                                              .value,
+                                        ),
+                                      ),
+                                      fit: BoxFit.contain,
+                                    ),
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.primaryContainer,
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                  height: 500,
+                                ),
+                                Positioned(
+                                  right: 0,
+                                  child: IconButton(
+                                    onPressed: () {
+                                      chatController.selectedImagePath.value =
+                                          "";
+                                    },
+                                    icon: Icon(Icons.close),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        : Container(),
                   ),
                 ],
               ),
             ),
-          ),
-        ],
+            TypeMessage(
+              userModel: userModel,
+            ),
+          ],
+        ),
       ),
     );
   }

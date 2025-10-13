@@ -15,7 +15,7 @@ class ChatListWidget extends StatelessWidget {
             Get.toNamed("/chatpage");
           },
           child: ChatTile(
-            imageURL: AssetsImage.boyPic,
+            imageUrl: AssetsImage.boyPic,
             name: "John Smith",
             lastChat: "Hey! Are we still on for today?",
             lastTime: "4:15 PM",
@@ -26,7 +26,7 @@ class ChatListWidget extends StatelessWidget {
             Get.toNamed("/chatpage");
           },
           child: ChatTile(
-            imageURL: AssetsImage.boyPic,
+            imageUrl: AssetsImage.boyPic,
             name: "Sarah Connor",
             lastChat: "Thanks for the help!",
             lastTime: "2:30 PM",
@@ -37,7 +37,7 @@ class ChatListWidget extends StatelessWidget {
             Get.toNamed("/chatpage");
           },
           child: ChatTile(
-            imageURL: AssetsImage.boyPic,
+            imageUrl: AssetsImage.boyPic,
             name: "Mike Johnson",
             lastChat: "See you tomorrow",
             lastTime: "1:45 PM",
@@ -48,7 +48,7 @@ class ChatListWidget extends StatelessWidget {
             Get.toNamed("/chatpage");
           },
           child: ChatTile(
-            imageURL: AssetsImage.boyPic,
+            imageUrl: AssetsImage.boyPic,
             name: "Emily Davis",
             lastChat: "Got it! 👍",
             lastTime: "Yesterday",
